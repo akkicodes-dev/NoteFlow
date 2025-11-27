@@ -1,0 +1,1 @@
+A clean function-based intuitive note-taking app with Material You design.

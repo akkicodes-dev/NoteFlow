@@ -1,0 +1,74 @@
+name: Nightly Build
+
+on:
+  #push:
+    #branches:
+      #- master
+  workflow_dispatch:
+    inputs:
+      commit:
+        description: 'Commit hash to build'
+        required: false
+        default: '13235d467ccf36691311e14e63e57ac350e3c930'
+        type: string
+
+concurrency:
+  group: ${{ github.workflow }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Set up Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'adopt'
+          cache: gradle
+
+      - name: Grant execution permission to Gradle Wrapper
+        run: chmod +x gradlew
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease
+
+      - name: Decode the Keystore from Base64
+        run: echo "${{ secrets.KEY_BASE64 }}" | base64 --decode > signingKey.jks
+
+      - name: Sign app APK
+        uses: r0adkll/sign-android-release@v1
+        id: sign_app
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEY_BASE64 }}
+          alias: ${{ secrets.KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEYSTORE_PASSWORD }}  
+        env:
+          BUILD_TOOLS_VERSION: "34.0.0"
+
+      - name: Rename APK
+        run: mv app/build/outputs/apk/release/app-release-signed.apk WriteOn-nightly.apk
+
+      - name: Upload the APK
+        uses: actions/upload-artifact@v4.3.5
+        with:
+          name: WriteOn-Nightly
+          path: WriteOn-nightly.apk
+
+      - name: Update nightly release
+        uses: pyTooling/Actions/releaser@main
+        with:
+          tag: Nightly
+          token: ${{ secrets.TOKEN }}
+          files: WriteOn-nightly.apk

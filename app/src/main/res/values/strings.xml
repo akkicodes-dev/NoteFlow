@@ -1,0 +1,205 @@
+<resources>
+    <!-- App Info -->
+    <string name="app_name">NoteFlow</string>
+    <string name="developer_name">AkkiCodes-dev</string>
+    <string name="about_app">NoteFlow is a modern note-taking app built with Jetpack Compose and clean architecture.</string>
+
+
+    <string name="version">App Version</string>
+    <string name="build_type">Build Type</string>
+    <string name="latest_release">Check Latest Release</string>
+    <string name="source_code">Open Source Code</string>
+    <string name="app_list">Version Catalogue</string>
+    <string name="android">About Phone</string>
+    <string name="android_description">details</string>
+    <string name="about">About</string>
+    <string name="description_about">Github • Version •  Email</string>
+
+    <!-- Welcome / Greeting -->
+        <string name="startup">"Help ~ Create ~ Share"</string>
+    <string name="enter_placeholder">Home Greeting</string>
+    <string name="enter_placeholder_description">Input any text to your liking</string>
+
+    <!-- Notes -->
+    <string name="add_note">New Note</string>
+    <string name="new_note">Create</string>
+    <string name="created_time">Note Created</string>
+    <string name="select_note">Select Note</string>
+    <string name="untitled">Untitled</string>
+    <string name="description">Description</string>
+    <string name="pinned">Pinned</string>
+    <string name="pin">Pin</string>
+    <string name="delete">Delete</string>
+    <string name="alert_text">Move this note(s) to your Recycle Bin?</string>
+    <string name="yes"> Confirm</string>
+    <string name="cancel"> Cancel</string>
+    <string name="share">Share</string>
+    <string name="share_text">Share text</string>
+
+    <!-- Sort & View -->
+    <string name="grid_view">Grid Layout</string>
+    <string name="column_view">List Layout</string>
+    <string name="columns">Column View Count</string>
+    <string name="columns_description">Select amount of columns for grid</string>
+    <string name="sort_ascending">Sort Ascending</string>
+    <string name="sort_descending">Sort Descending</string>
+    <string name="sort_description">Sort notes by their creation time</string>
+    <string name="view_style_description">Select sorting style for notes</string>
+
+    <!-- Search -->
+    <string name="search">Search</string>
+    <string name="search_note">Search</string>
+
+    <!-- Selection -->
+    <string name="select_all">Select all</string>
+
+    <!-- Word & Character Count -->
+    <string name="words">Total Words</string>
+    <string name="characters">Characters</string>
+
+    <!-- Settings -->
+    <string name="screen_settings">Settings</string>
+    <string name="display">Display</string>
+    <string name="color_styles"><![CDATA[Color & Styles]]></string>
+    <string name="description_color_styles">Style • Theme • Sizes</string>
+    <string name="language">Language</string>
+    <string name="system_language">System Language</string>
+    <string name="language_description">Change the app language</string>
+    <string name="description_language">Font • Language</string>
+    <string name="radius">Radius</string>
+    <string name="select_radius">Select Radius</string>
+    <string name="radius_description">Customize border radius</string>
+    <string name="font_size">Adjust Font Size</string>
+    <string name="select_font_size">Select Font Size</string>
+    <string name="enter_font_size_description">Affects edit and preview text size</string>
+    <string name="select_font">Font</string>
+
+    <!-- Themes -->
+    <string name="system_theme">System Theme</string>
+    <string name="dark_theme">Dark Theme</string>
+    <string name="dynamic_colors">Dynamic Colors</string>
+    <string name="amoled_colors">Amoled Colors</string>
+    <string name="extreme_amoled_mode">Extreme Amoled Colors</string>
+    <string name="system_theme_description">Adapts system default color scheme</string>
+    <string name="dark_theme_description">Toggles between light and dark theme</string>
+    <string name="dynamic_colors_description">Adjusts colors to match your wallpaper</string>
+    <string name="amoled_colors_description">Use a deep dark colored background</string>
+    <string name="extreme_amoled_mode_description">Works perfectly for AMOLED Devices</string>
+
+    <!-- View / Reader -->
+    <string name="minimalistic_mode">Reader Mode</string>
+    <string name="minimalistic_mode_description">Changes the way the notes look</string>
+
+    <!-- Backup / Restore -->
+    <string name="backup_restore">Fingerprint • Security</string>
+    <string name="database_backup">Database Backup</string>
+    <string name="database_restore">Database Restore</string>
+    <string name="backup">Backup</string>
+    <string name="restore">Restore</string>
+    <string name="auto_backup">Automatic Backup</string>
+    <string name="auto_backup_description">Saves automatically to Android/data folder (For Android 10+ devices requires ROOT to access due to the current android policy)</string>
+    <string name="backup_dropdown">Backup</string>
+    <string name="backup_description">Store or restore all notes to/from a zip file. Note that this replaces your entire existing notes as well as clearing the recycle bin.</string>
+    <string name="restore_description">Restore notes from a zip file</string>
+
+    <!-- File Import -->
+    <string name="file_import_title">Import</string>
+    <string name="file_import_description">Import other text files as notes</string>
+    <string name="file_import_success">Successfully imported</string>
+    <string name="file_import_error">Couldn\'t import</string>
+    <string name="file_import_partial_error">Import of some files failed</string>
+
+    <!-- Markdown / Extras -->
+    <string name="markdown">Additional Customizations</string>
+    <string name="markdown_description">Bulletin • Checklist • Image</string>
+    <string name="description_markdown">Support • Images</string>
+    <string name="images_support">Images Support</string>
+    <string name="description_widgets">Widgets • Markdown</string>
+
+    <!-- Tools -->
+    <string name="tools">Tools</string>
+    <string name="description_tools">Sort • Customization</string>
+
+    <!-- History -->
+    <string name="history">History</string>
+    <string name="description_history">History • Revert</string>
+
+    <!-- Security / Vault -->
+    <string name="security">Secure</string>
+    <string name="encrypt_database">Encrypt Database</string>
+    <string name="encrypt_database_description">Safeguard database during backup</string>
+    <string name="database_restore_error">Password is invalid or the database isn\'t encrypted</string>
+    <string name="password_prompt">Enter password</string>
+    <string name="password_continue">continue</string>
+    <string name="invalid_password">Invalid Password</string>
+    <string name="password_delete">Delete Password</string>
+    <string name="screen_protection">Screen Protection</string>
+    <string name="screen_protection_description">Blurs content when app is switched..\nProtects app from screenshots…</string>
+    <string name="biometric_authentication">Biometric Authentication</string>
+    <string name="biometric_authentication_description">Coming Soon!"</string>
+    <string name="vault_description">Enable extra layer of protection</string>
+
+    <!-- General -->
+    <string name="database">Database</string>
+    <string name="not_supported">Not supported yet</string>
+    <string name="note_details">Note Details</string>
+    <string name="cloud">Cloud</string>
+    <string name="homepage">Go Back to Homepage</string>
+    <string name="others">Others</string>
+    <string name="feature">Hello there</string>
+    <string name="support">(✦) WriteOn: Simple Notepad</string>
+    <string name="support_description">Show your love</string>
+    <string name="issue">Issue Feedback</string>
+    <string name="issue_description">Suggest features to developer</string>
+    <string name="guide">Help &amp; Answers</string>
+    <string name="description_guide">Shortcuts • Guide • Tips</string>
+    <string name="invalid_input">Invalid input</string>
+    <string name="save_and_exit">Save and Exit</string>
+
+    <!-- Behavior -->
+    <string name="Behavior">Behavior</string>
+    <string name="always_edit">Opening notes by default</string>
+    <string name="always_edit_description">Disabled - Prioritize View Mode\nEnabled - Prioritize Edit Mode</string>
+    <string name="show_only_title">Show only title in home screen</string>
+    <string name="show_only_title_description">Hide content thus giving more space</string>
+
+    <!-- Terms of Service -->
+    <string name="terms_of_service">Terms of service</string>
+    <string name="agree">Agree</string>
+    <string name="terms_acceptance_title">1. Acceptance of Terms</string>
+    <string name="terms_acceptance_body">Welcome to WriteOn. By using our application, you agree to these Terms of Service. Please read them carefully.</string>
+    <string name="terms_license_title">2. License in General</string>
+    <string name="terms_license_body">WriteOn is licensed under the **GNU General Public License (GPL) version 3**. This permits you to:\n- Use, modify, and share the application freely.\n- Distribute the application or modified versions, provided you also distribute the source code and retain the GPL license.</string>
+    <string name="terms_responsibilities_title">3. User Responsibilities</string>
+    <string name="terms_responsibilities_body">You are responsible for maintaining the confidentiality of your account information and for all activities under your account.</string>
+    <string name="terms_liabilities_title">4. Limitation of Liability</string>
+    <string name="terms_liabilities_body">WriteOn is provided "as is," without any warranties. We do not guarantee that the app will be error-free, secure, or uninterrupted.</string>
+    <string name="terms_warranties_title">5. Disclaimer of Warranties</string>
+    <string name="terms_warranties_body">We are not liable for any damages resulting from your use of WriteOn, including indirect, incidental, or consequential damages.</string>
+    <string name="terms_changes_title">6. Modification of Terms</string>
+    <string name="terms_changes_body">We may update these terms from time to time. The updated terms will be posted in the website, and the effective date will be updated accordingly.</string>
+    <string name="terms_privacy_title">7. Privacy Policy</string>
+    <string name="terms_privacy_body">WriteOn does not collect any personal data. For more information, please refer to our Privacy Policy available at</string>
+    <string name="terms_contact_title">8. Contact Us</string>
+    <string name="terms_contact_body">For any questions about these Terms of Service of WriteOn, please contact us at</string>
+    <string name="terms_effective_date">Effective Date</string>
+
+    <!-- Fun -->
+    <string name="announcements">✦ Open Source Licenses</string>
+    <string name="discord">Discord</string>
+    <string name="privacy">Privacy</string>
+    <string name="unsupported_image_size">Image Size is too huge(15mb)</string>
+    <string name="description_cloud">Save your notes locally and on the cloud</string>
+    <string name="pattern_authentication">Pattern Authentication</string>
+    <string name="pattern_authentication_description">Coming Soon!</string>
+    <string name="pin_authentication">Pin Authentication</string>
+    <string name="pin_authentication_description">Coming Soon!</string>
+
+    <string name="trash">Recycle Bin</string>
+    <string name="trash_empty">Recycle bin is empty!</string>
+    <string name="delete_forever">Delete</string>
+    <string name="confirm_restore">Restore selected note(s)?</string>
+    <string name="confirm_delete">Delete note(s) permanently?</string>
+    <string name="edit">Edit</string>
+    <string name="empty_description">No description yet…</string>
+</resources>

@@ -1,0 +1,258 @@
+package com.akkicodes.noteflow.presentation.screens.settings.model
+
+import android.content.Context
+import android.content.SharedPreferences
+import android.net.Uri
+import android.widget.Toast
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
+import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.akkicodes.noteflow.BuildConfig
+import com.akkicodes.noteflow.R
+import com.akkicodes.noteflow.data.repository.BackupResult
+import com.akkicodes.noteflow.data.repository.ImportExportRepository
+import com.akkicodes.noteflow.data.repository.SettingsRepositoryImpl
+import com.akkicodes.noteflow.domain.model.Settings
+import com.akkicodes.noteflow.domain.usecase.ImportExportUseCase
+import com.akkicodes.noteflow.domain.usecase.ImportResult
+import com.akkicodes.noteflow.domain.usecase.NoteUseCase
+import com.akkicodes.noteflow.domain.usecase.SettingsUseCase
+import com.akkicodes.noteflow.presentation.screens.settings.BackupWorker
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserException
+import java.io.IOException
+import java.util.concurrent.TimeUnit
+import javax.inject.Inject
+
+@HiltViewModel
+class SettingsViewModel @Inject constructor(
+    private val backup: ImportExportRepository,
+    private val settingsUseCase: SettingsUseCase,
+    val noteUseCase: NoteUseCase,
+    private val importExportUseCase: ImportExportUseCase,
+    private val settingsRepository: SettingsRepositoryImpl,
+    @ApplicationContext private val context: Context,
+    private val settingsPreferences: SettingsPreferences,
+) : ViewModel() {
+
+    private val _savedNote = MutableStateFlow("")
+    val savedNote: String get() = _savedNote.value
+
+    val databaseUpdate = mutableStateOf(false)
+    var password: String? = null
+
+    private val _dynamicPlaceholder = MutableStateFlow("Simple Notepad")
+    val dynamicPlaceholder: StateFlow<String> = _dynamicPlaceholder.asStateFlow()
+
+    private val sharedPreferences: SharedPreferences =
+        context.getSharedPreferences("notes_prefs", Context.MODE_PRIVATE)
+
+    private val _settings = mutableStateOf(Settings())
+    var settings: State<Settings> = _settings
+
+    init {
+        viewModelScope.launch {
+            val baseSettings = settingsUseCase.loadSettingsFromRepository()
+            _settings.value = baseSettings
+            settingsRepository.getTermsOfService().collect { termsAccepted ->
+                _settings.value = _settings.value.copy(termsOfService = termsAccepted)
+            }
+            settingsPreferences.columnsCount.collect { count ->
+                _settings.value = _settings.value.copy(columnsCount = count)
+                if (_settings.value.autoBackupEnabled) {
+                    startAutoBackup(context)
+                }
+            }
+            settingsPreferences.dynamicPlaceholder.collect { placeholder ->
+                _dynamicPlaceholder.value = placeholder
+            }
+        }
+    }
+
+    private val _visibleFabItems = MutableStateFlow<Set<String>>(emptySet())
+    val visibleFabItems: StateFlow<Set<String>> = _visibleFabItems.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            settingsPreferences.visibleFabItems.collect { set ->
+                _visibleFabItems.value = set
+            }
+        }
+    }
+
+
+
+    fun updateVisibleFabItems(newSet: Set<String>) {
+        viewModelScope.launch {
+            settingsPreferences.saveVisibleFabItems(newSet)
+        }
+    }
+
+
+    fun updateTermsOfService(accepted: Boolean) {
+        _settings.value = _settings.value.copy(termsOfService = accepted)
+        viewModelScope.launch {
+            settingsRepository.saveTermsOfService(accepted)
+        }
+    }
+
+    fun update(newSettings: Settings) {
+        _settings.value = newSettings.copy()
+        viewModelScope.launch {
+            settingsUseCase.saveSettingsToRepository(newSettings)
+            if (newSettings.autoBackupEnabled) {
+                startAutoBackup(context)
+            } else {
+                stopAutoBackup(context)
+            }
+        }
+    }
+
+    fun setColumnsCount(count: Int) {
+        viewModelScope.launch {
+            settingsPreferences.saveColumnsCount(count)
+            _settings.value = _settings.value.copy(columnsCount = count)
+        }
+    }
+
+    fun updateFontSize(size: Float) {
+        _settings.value = _settings.value.copy(fontSize = size)
+        viewModelScope.launch {
+            settingsUseCase.saveSettingsToRepository(_settings.value)
+        }
+    }
+
+    fun saveNote(note: String) {
+        sharedPreferences.edit().putString("note", note).apply()
+    }
+
+    fun loadNote(): String {
+        return sharedPreferences.getString("note", "") ?: ""
+    }
+
+    fun updatePlaceholder(newText: String) {
+        viewModelScope.launch {
+            settingsPreferences.savePlaceholder(newText)
+            _dynamicPlaceholder.value = newText
+        }
+    }
+
+    private fun startAutoBackup(context: Context) {
+        val backupRequest = PeriodicWorkRequestBuilder<BackupWorker>(1, TimeUnit.DAYS).build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "AutoBackup",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            backupRequest
+        )
+    }
+
+    private fun stopAutoBackup(context: Context) {
+        WorkManager.getInstance(context).cancelUniqueWork("AutoBackup")
+    }
+
+    fun onExportBackup(uri: Uri, context: Context) {
+        viewModelScope.launch {
+            val result = backup.exportBackup(uri, password)
+            handleBackupResult(result, context)
+            databaseUpdate.value = true
+        }
+    }
+
+    fun onImportBackup(uri: Uri, context: Context) {
+        viewModelScope.launch {
+            val result = backup.importBackup(uri, password)
+            handleBackupResult(result, context)
+            databaseUpdate.value = true
+        }
+    }
+
+    private fun getLocaleListFromXml(context: Context): LocaleListCompat {
+        val tagsList = mutableListOf<CharSequence>()
+        try {
+            val xpp: XmlPullParser = context.resources.getXml(R.xml.locales_config)
+            while (xpp.eventType != XmlPullParser.END_DOCUMENT) {
+                if (xpp.eventType == XmlPullParser.START_TAG && xpp.name == "locale") {
+                    tagsList.add(xpp.getAttributeValue(0))
+                }
+                xpp.next()
+            }
+        } catch (e: XmlPullParserException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+        return LocaleListCompat.forLanguageTags(tagsList.joinToString(","))
+    }
+
+    fun getSupportedLanguages(context: Context): Map<String, String> {
+        val localeList = getLocaleListFromXml(context)
+        val map = mutableMapOf<String, String>()
+        for (a in 0 until localeList.size()) {
+            localeList[a]?.let { map[it.getDisplayName(it)] = it.toLanguageTag() }
+        }
+        return map
+    }
+
+    private fun handleBackupResult(result: BackupResult, context: Context) {
+        when (result) {
+            is BackupResult.Success -> showToast("Successful Backup", context)
+            is BackupResult.Error -> showToast("Error", context)
+            BackupResult.BadPassword -> showToast(context.getString(R.string.database_restore_error), context)
+        }
+    }
+
+    private fun handleImportResult(result: ImportResult, context: Context) {
+        when (result.successful) {
+            result.total -> showToast(context.getString(R.string.file_import_success), context)
+            0 -> showToast(context.getString(R.string.file_import_error), context)
+            else -> showToast(context.getString(R.string.file_import_partial_error), context)
+        }
+    }
+
+    private fun showToast(message: String, context: Context) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+
+    private var flashcardStorage = mutableListOf<Flashcard>()
+    private val flashPrefs: SharedPreferences =
+        context.getSharedPreferences("flashcards_prefs", Context.MODE_PRIVATE)
+    private val gson = Gson()
+    private val listType = TypeToken.getParameterized(List::class.java, Flashcard::class.java).type
+
+    fun loadFlashcards(): List<Flashcard> {
+        val json = flashPrefs.getString("flashcards_key", null)
+        return if (json != null) {
+            try {
+                gson.fromJson<List<Flashcard>>(json, listType)
+            } catch (e: Exception) {
+                emptyList()
+            }
+        } else {
+            emptyList()
+        }
+    }
+
+    fun saveFlashcards(newList: List<Flashcard>) {
+        val json = gson.toJson(newList, listType)
+        flashPrefs.edit()
+            .putString("flashcards_key", json)
+            .apply()
+    }
+
+    val version: String = BuildConfig.VERSION_NAME
+    val build: String = BuildConfig.BUILD_TYPE
+}
