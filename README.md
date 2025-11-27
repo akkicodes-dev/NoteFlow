@@ -113,3 +113,6 @@ It motivates me to build more awesome apps 🙌
 - *Twitter: akash_satao_17
 - *Github: akkicodes-dev
 
+📥 Download APK  
+Latest Release: https://github.com/akkicodes-dev/NoteFlow/releases/latest
+
