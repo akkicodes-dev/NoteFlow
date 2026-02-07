@@ -1,118 +1,110 @@
-📒 NoteFlow – Modern Notepad App (Compose + MVVM + Clean Architecture)
+# WriteOn – Smart Notepad
 
-A beautifully designed note-taking app built using Jetpack Compose, following Clean Architecture & best Android practices.
+A modern, lightweight and feature-rich note taking application built with Android native stack.  
+Designed for speed, privacy and seamless user experience with clean architecture principles.
 
-🖼️ App Preview
-Home	Add Note	Settings
-<img src="https://via.placeholder.com/250x500?text=Home+Screen" width="200"/>	<img src="https://via.placeholder.com/250x500?text=Add+Note" width="200"/>	<img src="https://via.placeholder.com/250x500?text=Settings" width="200"/>
+---
 
-(You can send me your actual screenshots — main replace kar dunga)
+## 📱 Screenshots
 
-🚀 Features
+<p align="center">
+<img src="screenshots/home.png" width="200"/>
+<img src="screenshots/drawer.png" width="200"/>
+<img src="screenshots/settings.png" width="200"/>
+<img src="screenshots/tools.png" width="200"/>
+</p>
 
-✔ Minimal & modern UI
-✔ Add, update & delete notes
-✔ Search notes
-✔ Trash system (Recover deleted notes)
-✔ Dynamic theming
-✔ Light / Dark / AMOLED modes
-✔ Secure Mode (FLAG_SECURE on)
-✔ Fully offline — uses local Room DB
-✔ Hilt DI + Clean Architecture
-✔ Smooth animations & Material 3 components
+> Clean UI • Fast Performance • Offline First
 
-🛠️ Tech Stack
-🎨 UI
+---
 
-Jetpack Compose
+## ✨ Features
 
-Material 3
+- 📝 Create, Edit & Delete Notes  
+- 🔍 Instant Search  
+- 📌 Pin Important Notes  
+- 🗑 Trash Management  
+- 🎨 Theme & Style Customization  
+- 🔐 Privacy & Security Options  
+- 🧮 Built-in Calculator  
+- 📅 Calendar Integration  
+- ☁ Backup Support  
+- ⚙ Highly Customizable Tools
 
-Custom Theme (Teal + Blue)
+---
 
-🧠 Architecture
+## 🛠 Tech Stack
 
-MVVM
+**Language:** Kotlin  
+**UI:** Jetpack Compose / XML  
+**Architecture:** MVVM + Clean Architecture  
+**Database:** Room  
+**Async:** Coroutines  
+**Tools:** Android Studio, Gradle, Git
 
-Clean Architecture
+---
 
-UseCases
+## 🧱 Architecture Overview
 
-Repository Pattern
 
-📦 Storage
+- Single Source of Truth  
+- Lifecycle Aware Components  
+- Unidirectional Data Flow  
+- Modular & Testable Code
 
-Room Database
+---
 
-DAO
+## 🚀 Installation
 
-TypeConverters
+1. Clone the repository
 
-⚡ Dependency Injection
 
-Hilt
+2. Open in Android Studio  
+3. Sync Gradle  
+4. Run on device/emulator
 
-✨ Others
+---
 
-SplashScreen API
+## 📂 Project Structure
 
-Kotlin Coroutines
+app
+├── data
+│ ├── local
+│ └── repository
+├── ui
+│ ├── screens
+│ └── components
+├── viewmodel
+└── utils
 
-Flows
+---
 
-Live App Theme Switch
+## 🤝 Contributing
 
-📂 Project Structure
-app/
-├── data/
-│    ├── local/
-│    ├── dao/
-│    └── repository/
-├── domain/
-│    ├── model/
-│    └── usecase/
-├── presentation/
-│    ├── home/
-│    ├── edit/
-│    ├── settings/
-│    ├── trash/
-│    └── theme/
-└── di/
+Contributions are welcome.
 
-📲 Download
-📦 Latest Release APK
+1. Fork the repo  
+2. Create feature branch  
+3. Commit changes  
+4. Open Pull Request
 
-⬇️ Download APK
+Guidelines:
 
-💻 Clone Repository
-git clone https://github.com/akkicodes-dev/NoteFlow.git
+- Follow MVVM  
+- Clean commit messages  
+- Proper naming conventions  
+- One feature per PR
 
-🧪 Coming Soon
+---
 
-Cloud Backup (Firebase)
+## 📄 License
 
-Note Reminders
+MIT License © 2025 Akash Satao
 
-Multi-Device Sync
+---
 
-App Lock (PIN / Fingerprint)
+### 👨‍💻 Developer
 
-📜 License
-
-This project is licensed under the MIT License.
-You’re free to use the code with attribution.
-
-❤️ Support
-
-If you like this project, please give it a ⭐ on GitHub.
-It motivates me to build more awesome apps 🙌
-
-## 💬 Contact
-
-- *Email:* akashsatao2303@gmail.com
-- *Twitter: akash_satao_17
-- *Github: akkicodes-dev
-
-📥 Download APK  
-Latest Release: https://github.com/akkicodes-dev/NoteFlow/releases/latest
-
+**Akash Satao**  
+Android Developer  
+GitHub: @akkicodes-dev
