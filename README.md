@@ -1,4 +1,4 @@
-# WriteOn – Smart Notepad
+# NoteFlow – Smart Notepad
 
 A modern, lightweight and feature-rich note taking application built with Android native stack.  
 Designed for speed, privacy and seamless user experience with clean architecture principles.
